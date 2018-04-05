@@ -1,6 +1,6 @@
 import sys
 import math
-
+from Functions import listFunction, listFunctionStep, currentFunction
 
 def calculateDistance(endLocation):
 
@@ -49,10 +49,39 @@ def calculateDistance(endLocation):
 
     print("Distance from %s to square one is: %s" % (endLocation, distance))
 
+
+
+
+def nextValue(dictMatrix, nextPosition):
+
+    return sum(dictMatrix[function(nextPosition)] for function in listFunction if function(nextPosition) in dictMatrix)
+
+def nextPosition(dictMatrix, previousPosition):
+
+    next = [function for function in listFunctionStep if function(previousPosition) not in dictMatrix]
+
+    if len(next) == 3:
+        previous = [previousElement for previousElement in listFunctionStep if previousElement not in next][0]
+        index = listFunctionStep.index(previous) + 1
+        if index == len(listFunctionStep):
+            index = 0
+        currentFunction[0] = listFunctionStep[index]
+
+    return currentFunction[0](previousPosition)
+
+
 if __name__ == "__main__":
 
-    endLocation = int(sys.argv[1])
+    input = int(sys.argv[1])
 
-    calculateDistance(endLocation)
+    dictMatrix = {(0, 0): 1, (0, 1) : 1}
+    value = 1
+    position = (0, 1)
 
 
+    while value < input:
+        position = nextPosition(dictMatrix, position)
+        value = nextValue(dictMatrix, position)
+        dictMatrix[position] = value
+        print("Final value: %s " % value)
+        print("Pozicija: ", position)

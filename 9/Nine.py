@@ -7,6 +7,8 @@ def cleanText(fileContent):
     withoutExclamationMark = re.sub(r"(!.?)",r"", fileContent)
     print(withoutExclamationMark)
 
+    countGarbage(withoutExclamationMark)
+
     withoutGarbage = re.sub(r"(<.*?>)",r"", withoutExclamationMark)
     print(withoutGarbage)
 
@@ -24,11 +26,24 @@ def cleanText(fileContent):
 
     print("This is number of all groups: %s" % totalScore)
 
+def countGarbage(partiallyCleanedFileContent):
+
+    garbage = re.findall(r"<(.*?)>", partiallyCleanedFileContent)
+
+    count = sum([len(element) for element in garbage])
+    print("Number of garbage items: ", count)
+
+def readFile(fileName):
+    #Open file, read its content and return it.
+    with open(fileName, 'r') as file:
+
+        content = file.read()
+        return content
 
 
 if __name__ == "__main__":
 
-    file = open(sys.argv[1], "r")
+    file = readFile('dump.txt')
 
-    cleanText(file.readline())
+    cleanText(file)
 
